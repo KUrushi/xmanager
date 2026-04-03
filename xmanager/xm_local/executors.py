@@ -27,6 +27,9 @@ from xmanager.xm_local import registry
 
 GOOGLE_KUBERNETES_ENGINE_CLOUD_PROVIDER = 'GOOGLE_KUBERNETES_ENGINE'
 
+_DEFAULT_DATABRICKS_SPARK_VERSION = '15.4.x-scala2.12'
+_DEFAULT_DATABRICKS_NODE_TYPE = 'i3.xlarge'
+
 
 @attr.s(auto_attribs=True)
 class LocalSpec(xm.ExecutorSpec):
@@ -171,6 +174,54 @@ class Kubernetes(xm.Executor):
   def __attrs_post_init__(self):
     k8s_execution = importlib.import_module('xmanager.cloud.kubernetes')
     k8s_execution.register()
+
+  @override
+  @classmethod
+  async def launch(
+      cls, local_experiment_unit: Any, job_group: xm.JobGroup
+  ) -> Sequence[handles.ExecutionHandle]:
+    return await registry.get_launch_method(cls)(
+        local_experiment_unit, job_group
+    )
+
+
+@attr.s(auto_attribs=True)
+class DatabricksSpec(xm.ExecutorSpec):
+  """Databricks workspace location specification.
+
+  Attributes:
+    upload_path: DBFS path prefix for uploading wheel artifacts.
+  """
+
+  upload_path: str = 'dbfs:/FileStore/wheels'
+
+
+@attr.s(auto_attribs=True)
+class Databricks(xm.Executor):
+  """Databricks executor for running Python wheel tasks.
+
+  Attributes:
+    requirements: Resource requirements.
+    spark_version: Spark version for the ephemeral cluster.
+    node_type_id: Databricks node type.
+    num_workers: Number of worker nodes. 0 for single-node.
+    cluster_config: Additional cluster configuration passed directly
+      to the new_cluster spec.
+  """
+
+  requirements: xm.JobRequirements = attr.Factory(xm.JobRequirements)
+  spark_version: str = _DEFAULT_DATABRICKS_SPARK_VERSION
+  node_type_id: str = _DEFAULT_DATABRICKS_NODE_TYPE
+  num_workers: int = 0
+  cluster_config: Optional[Dict[str, Any]] = None
+
+  Spec = DatabricksSpec  # pylint: disable=invalid-name
+
+  def __attrs_post_init__(self):
+    databricks_execution = importlib.import_module(
+        'xmanager.cloud.databricks'
+    )
+    databricks_execution.register()
 
   @override
   @classmethod

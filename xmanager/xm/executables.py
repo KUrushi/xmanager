@@ -133,6 +133,29 @@ class PythonContainer(job_blocks.ExecutableSpec):
     return name_from_path(self.path)
 
 
+@attr.s(auto_attribs=True)
+class PythonWheel(job_blocks.ExecutableSpec):
+  """A Python package to be built as a wheel.
+
+  Suitable for backends that execute Python wheel tasks natively
+  (e.g., Databricks python_wheel_task).
+
+  Attributes:
+    entrypoint: The entry point name declared in the package's
+      [project.scripts] (e.g., 'train').
+    path: Path to the Python project root (must contain pyproject.toml).
+  """
+
+  entrypoint: str
+  path: str = attr.ib(
+      converter=utils.resolve_path_relative_to_launcher, default='.'
+  )
+
+  @property
+  def name(self) -> str:
+    return name_from_path(self.path)
+
+
 class BinaryDependency(abc.ABC):
   """Additional resource for `Binary` / `BazelBinary`.
 

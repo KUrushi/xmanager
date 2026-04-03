@@ -265,6 +265,46 @@ def python_container(
   )
 
 
+def python_wheel(
+    executor_spec: job_blocks.ExecutorSpec,
+    entrypoint: str,
+    path: str = '.',
+    *,
+    args: Optional[job_blocks.UserArgs] = None,
+    env_vars: Mapping[str, Any] = immutabledict.immutabledict(),
+) -> job_blocks.Packageable:
+  """A Python package to be built as a wheel.
+
+  Suitable for backends that execute Python wheel tasks natively
+  (e.g., Databricks python_wheel_task).
+
+  Args:
+    executor_spec: Where the wheel should be launched. Instructs for which
+      platform it should be packaged.
+    entrypoint: The entry point name declared in the package's
+      [project.scripts] (e.g., 'train').
+    path: Path to the Python project root (must contain pyproject.toml).
+    args: Command line arguments to pass. This can be dict, list or
+      xm.SequentialArgs. Dicts are most convenient for keyword flags.
+      {'batch_size': 16} is passed as --batch_size=16. If positional arguments
+      are needed one can use a list or xm.SequentialArgs.
+    env_vars: Environment variables to be set.
+
+  Returns:
+    A packageable object which can be turned into an executable with
+    Experiment.package or Experiment.package_async.
+  """
+  return job_blocks.Packageable(
+      executable_spec=executables.PythonWheel(
+          entrypoint=entrypoint,
+          path=path,
+      ),
+      executor_spec=executor_spec,
+      args=args,
+      env_vars=env_vars,
+  )
+
+
 def dockerfile_container(
     executor_spec: job_blocks.ExecutorSpec,
     path: str = '.',

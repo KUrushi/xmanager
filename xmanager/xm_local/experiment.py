@@ -48,8 +48,10 @@ class _LaunchResult:
     return self.handles.get(local_executors.Local, [])
 
   def get_non_local_handles(self) -> list[execution_handles.ExecutionHandle]:
-    return self.handles.get(local_executors.Vertex, []) + self.handles.get(
-        local_executors.Kubernetes, []
+    return (
+        self.handles.get(local_executors.Vertex, [])
+        + self.handles.get(local_executors.Kubernetes, [])
+        + self.handles.get(local_executors.Databricks, [])
     )
 
 

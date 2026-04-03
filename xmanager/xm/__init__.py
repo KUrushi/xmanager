@@ -45,6 +45,7 @@ from xmanager.xm.executables import Container
 from xmanager.xm.executables import Dockerfile
 from xmanager.xm.executables import ModuleName
 from xmanager.xm.executables import PythonContainer
+from xmanager.xm.executables import PythonWheel
 from xmanager.xm.job_blocks import Constraint
 from xmanager.xm.job_blocks import Executable
 from xmanager.xm.job_blocks import ExecutableSpec
@@ -68,6 +69,7 @@ from xmanager.xm.packagables import binary
 from xmanager.xm.packagables import container
 from xmanager.xm.packagables import dockerfile_container
 from xmanager.xm.packagables import python_container
+from xmanager.xm.packagables import python_wheel
 from xmanager.xm.resources import AcceleratorType
 from xmanager.xm.resources import Architecture
 from xmanager.xm.resources import GpuType

@@ -21,6 +21,7 @@ from xmanager.bazel import client as bazel_client
 from xmanager.xm_local import executors
 from xmanager.xm_local.packaging import bazel_tools
 from xmanager.xm_local.packaging import cloud as cloud_packaging
+from xmanager.xm_local.packaging import databricks as databricks_packaging
 from xmanager.xm_local.packaging import local as local_packaging
 
 
@@ -42,6 +43,12 @@ def _packaging_router(
       )
     case executors.KubernetesSpec():
       return cloud_packaging.package_cloud_executable(
+          built_targets,
+          packageable,
+          packageable.executable_spec,
+      )
+    case executors.DatabricksSpec():
+      return databricks_packaging.package_databricks_executable(
           built_targets,
           packageable,
           packageable.executable_spec,

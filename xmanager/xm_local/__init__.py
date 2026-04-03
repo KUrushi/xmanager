@@ -38,6 +38,14 @@ _apis = [
     ),
     _module_lazy_loader.XManagerAPI(
         module="xmanager.xm_local.executors",
+        symbol="Databricks",
+    ),
+    _module_lazy_loader.XManagerAPI(
+        module="xmanager.xm_local.executors",
+        symbol="DatabricksSpec",
+    ),
+    _module_lazy_loader.XManagerAPI(
+        module="xmanager.xm_local.executors",
         symbol="DockerOptions",
     ),
     _module_lazy_loader.XManagerAPI(
@@ -121,6 +129,8 @@ if typing.TYPE_CHECKING:
 
   Caip = _executors.Caip
   CaipSpec = _executors.CaipSpec
+  Databricks = _executors.Databricks
+  DatabricksSpec = _executors.DatabricksSpec
   DockerOptions = _executors.DockerOptions
   Kubernetes = _executors.Kubernetes
   KubernetesSpec = _executors.KubernetesSpec

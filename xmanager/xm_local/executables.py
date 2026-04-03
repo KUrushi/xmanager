@@ -44,3 +44,14 @@ class GoogleContainerRegistryImage(xm.Executable):
   image_path: str
   args: xm.SequentialArgs = attr.Factory(xm.SequentialArgs)
   env_vars: Dict[str, str] = attr.Factory(dict)
+
+
+@attr.s(auto_attribs=True)
+class DatabricksWheel(xm.Executable):
+  """A wheel uploaded to Databricks (DBFS or Unity Catalog Volumes)."""
+
+  wheel_path: str
+  entry_point: str
+  package_name: str
+  args: xm.SequentialArgs = attr.Factory(xm.SequentialArgs)
+  env_vars: Dict[str, str] = attr.Factory(dict)

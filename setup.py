@@ -50,6 +50,9 @@ setup(
         'sqlparse',
         'termcolor',
     ],
+    extras_require={
+        'databricks': ['databricks-sdk'],
+    },
     entry_points={
         'console_scripts': [
             'xmanager = xmanager.cli.cli:entrypoint',
